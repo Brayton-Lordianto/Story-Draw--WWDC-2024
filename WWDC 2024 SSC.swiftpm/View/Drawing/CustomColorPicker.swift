@@ -52,7 +52,7 @@ struct CanvasMenu: View {
         }) {
             VStack {
                 Image(systemName: "trash")
-                Text("Clear")
+                Text("Clear").foregroundStyle(.white)
             }
         }
         .foregroundColor(.yellow)
@@ -98,8 +98,10 @@ struct CanvasMenu: View {
         }) {
             VStack {
                 Image(systemName: "square.and.arrow.down.fill")
-                Text("Save")
+                Text("Save in Camera Roll")
+                    .frame(width: 100).foregroundStyle(.black)
             }
+            .padding(.vertical)
         }
     }
     
@@ -117,8 +119,8 @@ struct CanvasMenu: View {
                 singleTool(label: "partial eraser", imageName: "eraser", associatedTool: .partialEraser)
                     .frame(width: 100)
             }
-            clearSelection()
             downloadImageButton()
+            clearSelection()
         }
     }
 }

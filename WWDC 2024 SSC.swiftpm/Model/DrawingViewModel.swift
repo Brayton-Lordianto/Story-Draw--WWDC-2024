@@ -2,43 +2,35 @@ import Foundation
 import PencilKit
 
 struct DrawingModel {
-    var canvas: PKCanvasView
-    var toolPicker: PKToolPicker
-    
-    init() {
-        self.canvas = PKCanvasView()
-        self.toolPicker = PKToolPicker()
-     }
+    var drawing: PKCanvasView
+    var name: String
 }
 
 class DrawingViewModel: ObservableObject {
-    @Published var drawingModel: DrawingModel
+    @Published var drawings = [DrawingModel]()
+    public let cellsPerRow = 3
     
     init() {
-        self.drawingModel = DrawingModel()
-    }
-
-    // initialize the canvas
-    func initializeCanvas() {
-        // basic settings
-        drawingModel.canvas.drawingPolicy = .anyInput
-        drawingModel.canvas.backgroundColor = .clear
-        
-        // make a black border background around the canvas
-        drawingModel.canvas.layer.borderColor = UIColor.blue.cgColor
-        drawingModel.canvas.layer.borderWidth = 5
-        
-        
-        // set up a built in tool picker
-        drawingModel.toolPicker.setVisible(true, forFirstResponder: drawingModel.canvas)
-        drawingModel.toolPicker.addObserver(drawingModel.canvas)
-        drawingModel.canvas.becomeFirstResponder()
-        drawingModel.toolPicker.setVisible(true, forFirstResponder: drawingModel.canvas)
+        // let drawings be of size 10
+        for _ in 0..<10 {
+            addDrawing()
+        }
     }
     
-    //  return the drawing as a UIImage
-    func drawingAsImage() -> UIImage {
-        let image = drawingModel.canvas.drawing.image(from: drawingModel.canvas.drawing.bounds, scale: 1)
-        return image
+    // c d drawings
+    func addDrawing() {
+        drawings.append(DrawingModel(drawing: PKCanvasView(), name: "Untitled"))
+    }
+    
+    func removeDrawing(at index: Int) {
+        drawings.remove(at: index)
+    }
+    
+    func rowCount() -> Int {
+        return drawings.count / cellsPerRow
+    }
+    
+    func index(row: Int, col: Int) -> Int {
+        return row * cellsPerRow + col
     }
 }

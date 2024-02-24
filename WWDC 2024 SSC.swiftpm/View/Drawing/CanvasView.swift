@@ -27,16 +27,15 @@ struct CanvasView: View {
     
     var body: some View {
         HStack {
-            DrawingView(canvas: $canvas, isDraw: $isDraw, color: $color, drawingTool: $drawingTool)
-            
             ZStack {
                 Color.brown
                 CanvasMenu(toolSelection: $drawingTool, color: $color, canvas: $canvas)
-//                    .padding(.leading)
-//                    .padding(.bottom)
-            }.ignoresSafeArea()
+            }.ignoresSafeArea()           
+                .frame(width: UIScreen.main.bounds.width * 0.25)
+            
+            // drawing view should take 80% of the screen
+            DrawingView(canvas: $canvas, isDraw: $isDraw, color: $color, drawingTool: $drawingTool)
 
-//            Text("hi")
         }
     }
 
@@ -103,6 +102,7 @@ struct DrawingViewRepresentable : UIViewRepresentable {
     
     var canvas: Binding<PKCanvasView>
     var isDraw: Binding<Bool>
+    
     var color: Binding<Color>
     var drawingTool: Binding<tool>
     

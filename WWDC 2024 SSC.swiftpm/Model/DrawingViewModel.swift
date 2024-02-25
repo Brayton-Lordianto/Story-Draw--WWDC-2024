@@ -2,8 +2,9 @@ import Foundation
 import PencilKit
 
 struct DrawingModel {
-    var drawing: PKCanvasView
+    var canvas: PKCanvasView
     var name: String
+    var isSelected: Bool = false
 }
 
 class DrawingViewModel: ObservableObject {
@@ -11,15 +12,15 @@ class DrawingViewModel: ObservableObject {
     public let cellsPerRow = 3
     
     init() {
-        // let drawings be of size 10
-        for _ in 0..<10 {
+        // let drawings be of size
+        for _ in 0..<1 {
             addDrawing()
         }
     }
     
     // c d drawings
     func addDrawing() {
-        drawings.append(DrawingModel(drawing: PKCanvasView(), name: "Untitled"))
+        drawings.append(DrawingModel(canvas: PKCanvasView(), name: "Untitled"))
     }
     
     func removeDrawing(at index: Int) {

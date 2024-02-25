@@ -18,6 +18,7 @@ struct InsertImageButton: View {
         .onChange(of: drawingAsImage, initial: false) { (_, newValue) in
             guard let newValue else { return }
             overlayImage(image: newValue)
+            print("hi there")
         }
         .popover(isPresented: $showingImagePicker) {
             ImagePicker(image: $drawingAsImage)

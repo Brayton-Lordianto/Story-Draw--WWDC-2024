@@ -16,9 +16,11 @@ let package = Package(
         .iOSApplication(
             name: "Swift Student Challenge 24",
             targets: ["AppModule"],
+            bundleIdentifier: "wwdcssc.com",
+            teamIdentifier: "X622SX6D57",
             displayVersion: "1.0",
             bundleVersion: "1",
-            appIcon: .placeholder(icon: .magicWand),
+            appIcon: .asset("AppIcon"),
             accentColor: .presetColor(.yellow),
             supportedDeviceFamilies: [
                 .pad,
@@ -29,6 +31,13 @@ let package = Package(
                 .landscapeRight,
                 .landscapeLeft,
                 .portraitUpsideDown(.when(deviceFamilies: [.pad]))
+            ],
+            capabilities: [
+                .fileAccess(.pictureFolder, mode: .readWrite),
+                .photoLibrary(purposeString: "\"Enable Saving Drawings to Photo Library\" "),
+                .photoLibraryAdd(purposeString: "\"Enable Saving Drawings to Photo Library\" "),
+                .microphone(purposeString: "\"Enable Speech Recognition\" "),
+                .speechRecognition(purposeString: "\"Enable Speech Recognition\"")
             ]
         )
     ],

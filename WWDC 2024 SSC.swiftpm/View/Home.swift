@@ -13,40 +13,50 @@ struct Home: View {
     @StateObject var drawingViewModel = DrawingViewModel()
     var body: some View {
         NavigationStack {
-            Grid {
+            Grid(alignment: .leading) {
                 ForEach(0..<10) { row in
                     GridRow {
                         ForEach(0..<drawingViewModel.cellsPerRow) { column in
-                            if drawingViewModel.index(row: row, col: column) <= drawingViewModel.drawings.count {
-                                NavigationLink(value: drawingViewModel.index(row: row, col: column)) {
-                                    Text("Drawing Link")
-                                        .foregroundStyle(.black)
-                                }
+                            let index = drawingViewModel.index(row: row, col: column)
+                            if index < drawingViewModel.drawings.count {
+                                Spacer()
+                                navigationLink(index: index)
+                                Spacer()
                             }
                         }
                     }
                 }
+                Spacer()
             }
-            
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: drawingViewModel.addDrawing) {
+                        VStack {
+                            Image(systemName: "plus")
+                            Text("Add New")
+                        }
+                    }.foregroundStyle(.blue)
+                }
+            }
             .navigationDestination(for: Int.self) { index in
-                CanvasView(canvas: $drawingViewModel.drawings[index].drawing)
+                CanvasView(drawing: $drawingViewModel.drawings[index])
             }
-//            CanvasView(canvas: drawingViewModel.drawings[0].drawing)
-//                .onAppear {
-//                    drawingViewModel.addDrawing()
-//                }
-//            ForEach(drawings) { drawing in
-//                NavigationLink(destination: CanvasView(drawingViewModel: drawing)) {
-//                    Text("Drawing")
-//                }
-//            }
-//
-//            .navigationDestination(for: Int.self) { item in
-//                CanvasView(drawingViewModel: drawings)
-//            }
+            .navigationTitle("Drawings").navigationBarTitleDisplayMode(.large)
         }
-        
-        // function that takes in a view
-        
     }
+        
+    func navigationLink(index: Int) -> some View {
+        NavigationLink(value: index) {
+            VStack {
+                Image(uiImage: drawingViewModel.extractImage(index: index))
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 150, height: 150)
+                
+                Text(drawingViewModel.drawings[index].name)
+                    .foregroundStyle(.black)
+            }
+        }
+    }
+
 }

@@ -15,7 +15,7 @@ case pen
 }
 
 struct CanvasView: View {
-    @Binding var canvas: PKCanvasView
+    @Binding var drawing: DrawingModel
     @State var isDraw = true
     @State var color = Color.white
     @State var drawingTool: tool = .marker
@@ -29,12 +29,12 @@ struct CanvasView: View {
         HStack {
             ZStack {
                 Color.brown
-                CanvasMenu(toolSelection: $drawingTool, color: $color, canvas: $canvas)
-            }.ignoresSafeArea()           
+                CanvasMenu(toolSelection: $drawingTool, color: $color, drawing: $drawing)
+            }.ignoresSafeArea()
                 .frame(width: UIScreen.main.bounds.width * 0.25)
             
             // drawing view should take 80% of the screen
-            DrawingView(canvas: $canvas, isDraw: $isDraw, color: $color, drawingTool: $drawingTool)
+            DrawingView(canvas: $drawing.canvas, isDraw: $isDraw, color: $color, drawingTool: $drawingTool)
 
         }
     }

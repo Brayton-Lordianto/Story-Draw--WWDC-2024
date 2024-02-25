@@ -7,7 +7,11 @@ struct debug {
     static var second = false 
 }
 
-struct Chat: View {
+public struct Chat: View {
+//    @StateObject var dvm: DrawingViewModel
+//    var idx: Int 
+    @Binding var imageToOverlay: UIImage? 
+    @Binding var drawing: DrawingModel
     @State public var STIManager: SpeechToImageVM
     @State private var isRecording = false
     @State private var mic = MicManager(numberOfSamples: 30)
@@ -18,13 +22,8 @@ struct Chat: View {
     @State var speechRecognizer = SpeechRecognizer()
     @State var AudioEngine = AVAudioEngine()
     
-    init(STIManager: SpeechToImageVM) {
-        self.STIManager = STIManager 
-    }
-    
-    var body: some View {
+    public var body: some View {
         ZStack {
-            
             VStack {
                 recordButton()
                     .padding(.bottom, 30)
@@ -46,7 +45,8 @@ struct Chat: View {
            Task { 
                await speechRecognizer.stopTranscribing()
                let transcript = await speechRecognizer.transcript
-               
+               let img = STIManager.processSpeechToText(speech: transcript)
+               imageToOverlay = img
            }
         }
     }
@@ -64,7 +64,7 @@ struct Chat: View {
         .foregroundColor(.red)
     }
 }
-
-#Preview(body: { 
-    Chat(STIManager: .init(drawing: .constant(sampleDrawing)))
-})
+//
+//#Preview(body: { 
+////    Chat(drawing: .constant(sampleDrawing), STIManager: .init(drawing: .constant(sampleDrawing)))
+//})

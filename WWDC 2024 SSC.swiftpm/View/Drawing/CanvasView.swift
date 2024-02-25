@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CanvasView: View {
     @Binding var drawing: DrawingModel
+    @State var imageToOverlay: UIImage? = nil
     @State var isDraw = true
     @State var color = Color.white
     @State var drawingTool: tool = .pen
@@ -26,10 +27,14 @@ struct CanvasView: View {
                 Spacer()
                 HStack {
                     Spacer()
-                    Chat(STIManager: .init(drawing: $drawing))  
-//                    Chat()
+                    Chat(imageToOverlay: $imageToOverlay, drawing: $drawing, STIManager: .init(drawing: $drawing))  
                         .padding(100)
                 }
+            }
+        }
+        .onChange(of: imageToOverlay) { oldValue, newValue in
+            if let image = newValue { 
+                drawing.overlayImage(image: image)
             }
         }
     }

@@ -20,16 +20,20 @@ struct InsertImageButton: View {
         .buttonStyle(GrowingButton())
         .onChange(of: photoImage, initial: false) { (_, newValue) in
             guard let newValue else { return }
-            overlayImage(image: newValue)
+            overlayTheImage(image: newValue)
         }
+        .onChange(of: drawing.name, { oldValue, newValue in
+            print("hi there")
+        })
         .popover(isPresented: $showingImagePicker) {
             ImagePicker(image: $photoImage)
         }
     }
     
     // overlay the image to the canvas
-    func overlayImage(image: UIImage) {
+    func overlayTheImage(image: UIImage) {
         drawing.overlayImage(image: image)
+//        drawing.overlayImage(image: UIImage(named: "sun") ?? UIImage())
     }
 }
 

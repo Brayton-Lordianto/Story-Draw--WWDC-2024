@@ -29,8 +29,9 @@ struct InsertImageButton: View {
     
     // overlay the image to the canvas
     func overlayImage(image: UIImage) {
-        editingImage.toggle()
         let imageView = DraggableImageView(image: image)
+        imageView.isUserInteractionEnabled = true
+        imageView.isMultipleTouchEnabled = true 
 //        imageView.frame = .init(origin: .zero, size: .init(width: 100, height: 100))
 //        imageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
         drawing.canvas.addSubview(imageView)

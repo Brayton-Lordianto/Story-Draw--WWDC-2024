@@ -9,9 +9,9 @@ struct DrawingModel {
     var idImage = UIImage()
     
     struct overlaidImage { 
-        var image = UIImage()
+        var image: UIImage
+        var center = CGPoint()
         var scale = CGAffineTransform(scaleX: 1, y: 1)
-        var translation = CGAffineTransform(translationX: 0, y: 0)
         var rotation = CGAffineTransform(rotationAngle: 0)
     }
 }
@@ -46,3 +46,11 @@ class DrawingViewModel: ObservableObject {
         return row * cellsPerRow + col
     }
 }
+//
+//extension DrawingModel { 
+//    func newOverlaidImage(image: UIImage) -> DrawingModel.overlaidImage {
+//        let element = overlaidImage(image: image)
+//        overlaidImages.append(overlaidImage)
+//        return element
+//    }
+//}

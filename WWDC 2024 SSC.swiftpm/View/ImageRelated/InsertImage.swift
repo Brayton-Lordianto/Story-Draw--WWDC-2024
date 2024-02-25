@@ -18,6 +18,15 @@ extension DrawingViewModel {
     }
 }
 
+extension DrawingModel { 
+    func overlayImage(image: UIImage) { 
+        let imageView = DraggableImageView(image: image)
+        imageView.isUserInteractionEnabled = true
+        imageView.isMultipleTouchEnabled = true
+        self.canvas.addSubview(imageView)
+    }
+}
+
 extension UIImage {
   func withBackground(color: UIColor, opaque: Bool = true) -> UIImage {
     UIGraphicsBeginImageContextWithOptions(size, opaque, scale)

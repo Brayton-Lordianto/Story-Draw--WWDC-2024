@@ -15,16 +15,12 @@ struct CanvasMenu: View {
     @State var editingImage: Bool = false 
     
     var body: some View {
-        if editingImage { 
-            Button("Finish and Save") { 
-                self.editingImage.toggle()
-            }.buttonStyle(GrowingButton())
-        } else { 
         VStack(alignment: .center) {
-            TextField("", text: $drawing.name)
+            TextField("Placeholder", text: $drawing.name)
+                .textFieldStyle(.roundedBorder)
                 .font(.title)
                 .frame(width: 200)
-                .padding(.bottom)
+                .padding()
             
             Text("Color")
                 .fontWeight(.black)
@@ -47,7 +43,6 @@ struct CanvasMenu: View {
             }
             .onAppear { drawing.isSelected.toggle() }
             .onDisappear { drawing.isSelected.toggle() }
-    }
     }
     
     func clearButton() -> some View  {

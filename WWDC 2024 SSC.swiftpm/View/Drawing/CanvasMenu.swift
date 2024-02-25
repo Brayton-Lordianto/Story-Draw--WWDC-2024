@@ -12,8 +12,14 @@ struct CanvasMenu: View {
     @Binding var toolSelection: tool
     @Binding var color: Color
     @Binding var drawing: DrawingModel
+    @State var editingImage: Bool = false 
     
     var body: some View {
+        if editingImage { 
+            Button("Finish and Save") { 
+                self.editingImage.toggle()
+            }.buttonStyle(GrowingButton())
+        } else { 
         VStack(alignment: .center) {
             TextField("", text: $drawing.name)
                 .font(.title)
@@ -31,20 +37,25 @@ struct CanvasMenu: View {
                 .padding(.bottom)
             toolSection()
             
-            InsertImageButton()
-        }
-        .padding(30)
-        .frame(width: 135)
-        .background {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(Color("MenuColor"))
-        }
-        .onAppear { drawing.isSelected.toggle() }
-        .onDisappear { drawing.isSelected.toggle() }
+            InsertImageButton(drawing: $drawing, editingImage: $editingImage)
+        }.asAnyView()
+            .padding(30)
+            .frame(width: 135)
+            .background {
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundColor(Color("MenuColor"))
+            }
+            .onAppear { drawing.isSelected.toggle() }
+            .onDisappear { drawing.isSelected.toggle() }
+    }
     }
     
-    func clearSelection() -> some View  {
+    func clearButton() -> some View  {
         Button(action: {
+            // the first 5 is for the canvas view so don't remove that
+            for i in 5..<drawing.canvas.subviews.count {
+                drawing.canvas.subviews[i].removeFromSuperview()
+            }
             drawing.canvas.drawing = PKDrawing()
         }) {
             VStack {
@@ -117,7 +128,7 @@ struct CanvasMenu: View {
                     .frame(width: 100)
             }
             downloadImageButton()
-            clearSelection()
+            clearButton()
         }
     }
 }

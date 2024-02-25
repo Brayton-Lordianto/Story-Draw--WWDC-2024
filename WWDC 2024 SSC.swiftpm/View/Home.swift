@@ -55,6 +55,8 @@ struct Home: View {
                 
                 Text(drawingViewModel.drawings[index].name)
                     .foregroundStyle(.black)
+                
+                Text("\(drawingViewModel.drawings[index].canvas.subviews.count)")
             }
         }
     }

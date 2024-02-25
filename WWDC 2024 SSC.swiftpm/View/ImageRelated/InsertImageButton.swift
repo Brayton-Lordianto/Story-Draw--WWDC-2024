@@ -8,25 +8,36 @@
 import SwiftUI
 
 struct InsertImageButton: View {
+    @Binding var drawing: DrawingModel
+    @Binding var editingImage: Bool
     @State var showingImagePicker: Bool = false
-    @State var drawingAsImage: UIImage? = nil
+    @State var photoImage: UIImage? = nil
     
     var body: some View {
-        Button("hi") {
+        Button("Insert Image from Files") {
             showingImagePicker.toggle()
         }
-        .onChange(of: drawingAsImage, initial: false) { (_, newValue) in
+        .buttonStyle(GrowingButton())
+        .onChange(of: photoImage, initial: false) { (_, newValue) in
             guard let newValue else { return }
             overlayImage(image: newValue)
-            print("hi there")
         }
         .popover(isPresented: $showingImagePicker) {
-            ImagePicker(image: $drawingAsImage)
+            ImagePicker(image: $photoImage)
         }
     }
     
     // overlay the image to the canvas
     func overlayImage(image: UIImage) {
-        
+        editingImage.toggle()
+        let imageView = DraggableImageView(image: image)
+//        imageView.frame = .init(origin: .zero, size: .init(width: 100, height: 100))
+//        imageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+        drawing.canvas.addSubview(imageView)
+//        drawing.overlaidImages.append(image)
     }
+}
+
+#Preview {
+    InsertImageButton(drawing: .constant(.init(canvas: .init(), name: "Untitled")), editingImage: .constant(false))
 }

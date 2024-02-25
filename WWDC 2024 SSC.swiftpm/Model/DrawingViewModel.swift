@@ -5,7 +5,18 @@ struct DrawingModel {
     var canvas: PKCanvasView
     var name: String
     var isSelected: Bool = false
+    var overlaidImages = [overlaidImage]()
+    var idImage = UIImage()
+    
+    struct overlaidImage { 
+        var image = UIImage()
+        var scale = CGAffineTransform(scaleX: 1, y: 1)
+        var translation = CGAffineTransform(translationX: 0, y: 0)
+        var rotation = CGAffineTransform(rotationAngle: 0)
+    }
 }
+
+let sampleDrawing: DrawingModel = .init(canvas: .init(), name: "Untitled")
 
 class DrawingViewModel: ObservableObject {
     @Published var drawings = [DrawingModel]()
@@ -13,7 +24,7 @@ class DrawingViewModel: ObservableObject {
     
     init() {
         // let drawings be of size
-        for _ in 0..<1 {
+        for _ in 0..<4 {
             addDrawing()
         }
     }

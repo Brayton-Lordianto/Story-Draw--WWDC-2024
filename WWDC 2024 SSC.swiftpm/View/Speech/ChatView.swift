@@ -1,13 +1,26 @@
 import SwiftUI
+import Speech 
+import AVFoundation
+import Foundation
+
+struct debug { 
+    static var second = false 
+}
 
 struct Chat: View {
-    @State private var recording = false
-    @ObservedObject private var mic = MicManager(numberOfSamples: 30)
-    private var speechManager = SpeechManager()
+    @State public var STIManager: SpeechToImageVM
+    @State private var isRecording = false
+    @State private var mic = MicManager(numberOfSamples: 30)
+    @State private var speechManager = SpeechManager() 
     @State var count = 0
     @State var isShowingChat = false 
-    let arr = ["bonjour", "pitch", "chat"]
+    @State var recognizedText = ""
+    @State var speechRecognizer = SpeechRecognizer()
+    @State var AudioEngine = AVAudioEngine()
     
+    init(STIManager: SpeechToImageVM) {
+        self.STIManager = STIManager 
+    }
     
     var body: some View {
         ZStack {
@@ -23,29 +36,26 @@ struct Chat: View {
         
     }
     private func Transcribing() {
-        if speechManager.isRecording {
-            self.recording = false
-            mic.stopMonitoring()
-            speechManager.stopRecording()
-        } else {
-            self.recording = true
-            mic.startMonitoring()
-            speechManager.start { (speechText) in
-                guard let text = speechText, !text.isEmpty else {
-                    self.recording = false
-                    return
-                }
-//                viewModel.Dialog = text
-                print(text)
+        self.isRecording.toggle()
+        if isRecording { 
+            Task { 
+                await speechRecognizer.resetTranscript()
+                await speechRecognizer.startTranscribing()
             }
+        } else { 
+           Task { 
+               await speechRecognizer.stopTranscribing()
+               let transcript = await speechRecognizer.transcript
+               
+           }
         }
-        speechManager.isRecording.toggle()
     }
+    
     private func recordButton() -> some View {
         Button(action: {
             Transcribing()
         }) {
-            Image(systemName: recording ? "stop.circle.fill" : "mic.circle")
+            Image(systemName: isRecording ? "stop.circle.fill" : "mic.circle")
                 .font(.system(size: 40))
                 .padding()
                 .cornerRadius(10)
@@ -56,5 +66,5 @@ struct Chat: View {
 }
 
 #Preview(body: { 
-    Chat()
+    Chat(STIManager: .init(drawing: .constant(sampleDrawing)))
 })

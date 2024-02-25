@@ -16,9 +16,9 @@ struct CanvasView: View {
             ZStack {
                 Color.brown
                 CanvasMenu(toolSelection: $drawingTool, color: $color, drawing: $drawing)
-            }.ignoresSafeArea()
+            }
+            .edgesIgnoringSafeArea(.top)
         } detail: {
-            // drawing view should take 80% of the screen
             DrawSpace(drawing: $drawing, canvas: $drawing.canvas, isDraw: $isDraw, color: $color, drawingTool: $drawingTool)
         }
         .overlay {
@@ -26,7 +26,8 @@ struct CanvasView: View {
                 Spacer()
                 HStack {
                     Spacer()
-                    Chat()  
+                    Chat(STIManager: .init(drawing: $drawing))  
+//                    Chat()
                         .padding(100)
                 }
             }
